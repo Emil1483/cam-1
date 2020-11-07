@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "noImplicitAny": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "rootDir": "./sketch/",
+    "outDir": "./lib/",
+    "target": "es6"
+  }
+}
