@@ -1,17 +1,68 @@
 import { Vector } from "p5";
 
+let video: any;
+let classifier: any;
+type LabelType = 'Background' | 'Question' | 'Nervous' | 'Heart' | 'Gone' | null;
+let label: LabelType = null;
+
+let images: any = {};
+
 const g = 0.7;
 let v0: number;
 
+const countdownStart = 10;
+let countdown = countdownStart;
+
 const points: Point[] = [];
+
+function preload() {
+    classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/0ujvaP6mh/model.json');
+
+    images.Question = loadImage('../assets/Question.png');
+    images.Nervous = loadImage('../assets/Nervous.png');
+    images.Gone = loadImage('../assets/Gone.png');
+}
 
 function setup() {
     createCanvas(displayWidth, displayHeight);
+    video = createCapture(VIDEO);
+
+    video.hide();
+
+    classifier.classify(video, gotResults);
+
     v0 = sqrt(g * height * 4 / 3)
+
+    classifier.classify(video, gotResults);
+}
+
+let pResult: LabelType;
+function gotResults(error: any, results: { label: string, confidence: number }[]) {
+    if (error) {
+        console.log(error);
+        return;
+    }
+    
+    const result = results[0].label as LabelType;
+    if (result == pResult) {
+        countdown --;
+    } else {
+        countdown = countdownStart;
+    }
+    if (countdown == 0) label = result;
+
+    pResult = result;
+
+    classifier.classify(video, gotResults);
 }
 
 function draw() {
-    background(0, 255, 0);
+    image(video, 0, 0, width, height);
+
+    const img = images[label];
+    if (img) image(img, 0, 0);
+
+    if (label == 'Heart' && random(1) > 0.95) points.push(new Firework());
 
     for (let i = points.length - 1; i >= 0; i--) {
         const point = points[i];
@@ -22,10 +73,6 @@ function draw() {
     }
 
     points.forEach(point => point.show());
-}
-
-function mousePressed() {
-    points.push(new Firework());
 }
 
 abstract class Point {
@@ -64,7 +111,7 @@ class Particle extends Point {
 class Firework extends Point {
     constructor() {
         super();
-        this.pos = createVector(mouseX, height);
+        this.pos = createVector(random(width), height);
         this.vel = createVector(0, -v0);
     }
 
