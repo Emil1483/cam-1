@@ -10,13 +10,13 @@ let images: any = {};
 const g = 0.7;
 let v0: number;
 
-const countdownStart = 10;
+const countdownStart = 20;
 let countdown = countdownStart;
 
 const points: Point[] = [];
 
 function preload() {
-    classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/0ujvaP6mh/model.json');
+    classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/fPFygd0C8/model.json');
 
     images.Question = loadImage('../assets/Question.png');
     images.Nervous = loadImage('../assets/Nervous.png');
@@ -42,7 +42,7 @@ function gotResults(error: any, results: { label: string, confidence: number }[]
         console.log(error);
         return;
     }
-    
+
     const result = results[0].label as LabelType;
     if (result == pResult) {
         countdown --;
@@ -91,7 +91,15 @@ abstract class Point {
     show(): void {
         fill(255, 0, 0);
         noStroke();
-        circle(this.pos.x, this.pos.y, 20);
+
+        const r = this.vel.mag();
+        const a = this.vel.heading();
+
+        push();
+        translate(this.pos.x, this.pos.y);
+        rotate(a)
+        ellipse(0, 0, r * 2 + 10, 10);
+        pop();
     }
 
     get isDead(): boolean {
