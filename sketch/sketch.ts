@@ -16,7 +16,7 @@ let countdown = countdownStart;
 const points: Point[] = [];
 
 function preload() {
-    classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/fPFygd0C8/model.json');
+    classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/HWPpa7OS0/model.json');
 
     images.Question = loadImage('../assets/Question.png');
     images.Nervous = loadImage('../assets/Nervous.png');
