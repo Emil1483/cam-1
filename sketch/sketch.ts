@@ -29,11 +29,9 @@ function setup() {
 
     video.hide();
 
-    classifier.classify(video, gotResults);
-
     v0 = sqrt(g * height * 4 / 3)
 
-    classifier.classify(video, gotResults);
+    updateLabel();
 }
 
 let pResult: LabelType;
@@ -45,7 +43,7 @@ function gotResults(error: any, results: { label: string, confidence: number }[]
 
     const result = results[0].label as LabelType;
     if (result == pResult) {
-        countdown --;
+        countdown--;
     } else {
         countdown = countdownStart;
     }
@@ -53,11 +51,16 @@ function gotResults(error: any, results: { label: string, confidence: number }[]
 
     pResult = result;
 
-    classifier.classify(video, gotResults);
+    updateLabel();
+}
+
+function updateLabel() {
+    const cropped = video.get(0, 60, video.width, video.width * 9 / 16);
+    classifier.classify(cropped, gotResults);
 }
 
 function draw() {
-    image(video, 0, 0, width, height);
+    background(0, 255, 0);
 
     const img = images[label];
     if (img) image(img, 0, 0);
