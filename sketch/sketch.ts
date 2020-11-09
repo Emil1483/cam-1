@@ -60,7 +60,7 @@ function updateLabel() {
 }
 
 function draw() {
-    background(0, 255, 0);
+    background(0, 0, 255);
 
     const img = images[label];
     if (img) image(img, 0, 0);
