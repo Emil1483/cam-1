@@ -55,7 +55,8 @@ function gotResults(error: any, results: { label: string, confidence: number }[]
 }
 
 function updateLabel() {
-    const cropped = video.get(0, 60, video.width, video.width);
+    const size = video.height - 120;
+    const cropped = video.get((video.width - size) / 2, 60, size, size)
     classifier.classify(cropped, gotResults);
 }
 
