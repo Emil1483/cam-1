@@ -16,7 +16,7 @@ let countdown = countdownStart;
 const points: Point[] = [];
 
 function preload() {
-    classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/HWPpa7OS0/model.json');
+    classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/q2RHRZx8I/model.json');
 
     images.Question = loadImage('../assets/Question.png');
     images.Nervous = loadImage('../assets/Nervous.png');
@@ -55,7 +55,7 @@ function gotResults(error: any, results: { label: string, confidence: number }[]
 }
 
 function updateLabel() {
-    const cropped = video.get(0, 60, video.width, video.width * 9 / 16);
+    const cropped = video.get(0, 60, video.width, video.width);
     classifier.classify(cropped, gotResults);
 }
 
